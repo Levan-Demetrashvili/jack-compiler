@@ -11,3 +11,11 @@ jack_lexical_elements = {
         "+", "-", "*", "/", "&", "|", "<", ">", "=", "~"
     },
 }
+
+jack_compile_rules = {
+  "type": {'int','boolean','char','identifier'},
+  "class_var_dec_keywords" : {'field', 'static'},
+  "subroutines_dec_keywords" : {'constructor', 'function', 'method'},
+  "statements_keywords" : {"if", "while", "do", "let", "return"} 
+  
+}

@@ -23,7 +23,7 @@ def jack_tokenizer(filepath,file_stem):
   # write output into xml file
   with open(filepath.replace('.jack','T.xml'),'w') as f:
     f.write('<tokens>' + '\n')
-    for token,type_ in result:
+    for token,type_,_ in result:
       f.write(f"<{type_}> {token} </{type_}>\n")    
     f.write('</tokens>')
   return result
@@ -32,6 +32,7 @@ def jack_tokenizer(filepath,file_stem):
 def token_type(token):
   t_type = None 
   t = token
+  check_value = token
   if token in jack_lexical_elements["keywords"]:
     t_type = 'keyword'
   elif token in jack_lexical_elements["symbols"]:
@@ -46,11 +47,15 @@ def token_type(token):
         
   elif token.startswith('"'):
     t_type = 'stringConstant'
+    check_value = 'stringConstant'
     t = "".join(token.split('"'))
   elif token[0].isdigit():
     t_type = 'integerConstant'
+    check_value = 'integerConstant'
   else:
     t_type = 'identifier'
-  return t,t_type
+    check_value = 'identifier'
+    
+  return t,t_type,check_value
 
     
