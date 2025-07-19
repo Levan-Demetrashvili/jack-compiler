@@ -178,21 +178,49 @@ def compile_return(f,tokens):
 def compile_expression(f,tokens):
   f.write(f'<expression>\n')
   compile_term(f,tokens)
+  
+  if tokens[index][0] in jack_compile_rules["op_symbols"]:
+    validate(jack_compile_rules["op_symbols"], tokens[index],f)
+    compile_term(f,tokens)
+  
   f.write(f'</expression>\n')
 
 def compile_term(f,tokens):
   f.write(f'<term>\n')
-  validate({'identifier', 'this'}, tokens[index],f)
+  previous_token = tokens[index][2]
+  constants = {'stringConstant', 'integerConstant', '(' ,*jack_compile_rules["keyword_constants"],*jack_compile_rules["unary_op_symbols"]}  
+  validate({'identifier', *constants}, tokens[index],f)
+  if previous_token == '(':
+    compile_expression(f,tokens)
+    validate({')'}, tokens[index],f)
+  elif previous_token == 'identifier':
+    match tokens[index][2]:
+      case '[':
+        validate({'['}, tokens[index],f)
+        compile_expression(f,tokens)
+        validate({']'}, tokens[index],f)
+      case '(':
+        validate({'('}, tokens[index],f)
+        compile_expression_list(f,tokens)
+        validate({')'}, tokens[index],f)
+      case '.':
+        validate({'.'}, tokens[index],f)
+        validate({'identifier'}, tokens[index],f)
+        validate({'('}, tokens[index],f)
+        compile_expression_list(f,tokens)
+        validate({')'}, tokens[index],f)
+  elif previous_token in jack_compile_rules["unary_op_symbols"]:  
+    compile_term(f,tokens)
   f.write(f'</term>\n')
 
 def compile_expression_list(f,tokens):
   f.write(f'<expressionList>\n')
+  
   if tokens[index][0] != ')':
     compile_expression(f,tokens)
     while tokens[index][0] == ',':
       validate({','}, tokens[index],f)
       compile_expression(f,tokens)
-      
     
   f.write(f'</expressionList>\n')
   
@@ -205,4 +233,4 @@ def validate(valid_values,current_token,f):
     index += 1
     return
   else:
-    return SyntaxError
+    raise SyntaxError(f"current token doesn't match {valid_values}")

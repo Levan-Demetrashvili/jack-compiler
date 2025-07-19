@@ -40,10 +40,13 @@ def token_type(token):
     match token:
       case '<':
         t = '&lt;'
+        
       case '>':
         t = '&gt;'
       case '&':
         t = '&amp;'
+    
+    check_value = t
         
   elif token.startswith('"'):
     t_type = 'stringConstant'
