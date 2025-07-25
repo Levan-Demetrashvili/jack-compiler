@@ -11,7 +11,7 @@ def main():
     tokenized[program_name] = jack_tokenizer(sys.argv[1],program_name)
     #* compilation engine
     for _,tokens_array in tokenized.items():
-      compilation_engine(sys.argv[1].replace('jack','xml'),tokens_array)
+      compilation_engine(sys.argv[1].replace('jack','vm'),tokens_array)
   else:
     for file in os.listdir(sys.argv[1])[::-1]:
       if file.endswith('.jack'):
@@ -22,7 +22,7 @@ def main():
   
     #* compilation engine
     for class_name,tokens_array in tokenized.items():
-      compilation_engine(f"{sys.argv[1]}/{class_name}.xml",tokens_array)
+      compilation_engine(f"{sys.argv[1]}/{class_name}.vm",tokens_array)
   
   
 if __name__ == "__main__":

@@ -1,16 +1,20 @@
 from variables import jack_compile_rules
+from symbol_table import SymbolTable
 
 index = None
 f = None
 tokens = []
+class_table = SymbolTable()
+subroutine_table = SymbolTable()
 
 def compilation_engine(filepath,tokens_stream):
   global index,tokens,f
   index = 0
+  class_table.start_subroutine()
   with open(filepath,'w') as file:
     f = file
     tokens = tokens_stream
-    compile_class()
+    compile_class()  
   return
     
 def compile_class():
@@ -32,15 +36,22 @@ def compile_class_var_dec():
   validate(jack_compile_rules["class_var_dec_keywords"])
   validate(jack_compile_rules["type"])
   validate({'identifier'})
+  kind,type_,name = get_variable_info()
+  class_table.define(name,type_,kind) 
+  
   while tokens[index][0]  == ',':
     validate({','})
     validate({'identifier'})
+    class_table.define(tokens[index - 1][0],type_,kind) 
+  
   validate({';'})
   f.write(f'</classVarDec>\n')
   return
 
+
 def compile_subroutine_dec():
   f.write(f'<subroutineDec>\n')
+  subroutine_table.start_subroutine()
   validate(jack_compile_rules["subroutines_dec_keywords"])
   validate({'void',*jack_compile_rules["type"]})
   validate({'identifier'})
@@ -51,17 +62,23 @@ def compile_subroutine_dec():
   compile_subroutine_body()
   
   f.write(f'</subroutineDec>\n')
+  
 
 def compile_parameter_list():
   f.write(f'<parameterList>\n')
   if tokens[index][0] != ')':
     validate(jack_compile_rules["type"])
     validate({'identifier'})
+    _,type_,name = get_variable_info()
+    subroutine_table.define(name,type_,'argument')
     while tokens[index][0]  == ',':
       validate({','})
       validate(jack_compile_rules["type"])
       validate({'identifier'})
-    
+      _,type_,name = get_variable_info()
+      subroutine_table.define(name,type_,'argument')
+      
+  
   f.write(f'</parameterList>\n')
 
 def compile_subroutine_body():
@@ -82,9 +99,12 @@ def compile_var_dec():
   validate({'var'})
   validate(jack_compile_rules["type"])
   validate({'identifier'})
+  _,type_,name = get_variable_info()
+  subroutine_table.define(name,type_,'local')
   while tokens[index][0]  == ',':  
     validate({','})
     validate({'identifier'})
+    subroutine_table.define(tokens[index - 1][0],type_,'local')
   validate({';'})
   f.write(f'</varDec>\n')
   
@@ -238,3 +258,7 @@ def validate(valid_values):
     return
   else:
     raise SyntaxError(f"current token doesn't match {valid_values}")
+  
+
+def get_variable_info():
+  return tokens[index - 3][0], tokens[index - 2][0],tokens[index - 1][0]
