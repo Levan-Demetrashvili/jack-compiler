@@ -21,3 +21,20 @@ jack_compile_rules = {
   "unary_op_symbols": {'~' , '-' },
   "keyword_constants": {"true", "false", "null", "this"}
 }
+
+jack_to_vm_op = {
+  "+": "add",
+  "-": "sub",
+  "*": "call Math.multiply 2",
+  "/": "call Math.divide 2",
+  "&": "and",
+  "|": "or",
+  "<": "lt",
+  ">": "gt",
+  "=": "eq",
+}
+
+jack_to_vm_unary= {
+  '-': 'neg',
+  '~': 'not'
+}

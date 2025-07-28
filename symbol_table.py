@@ -16,7 +16,7 @@ class SymbolTable:
     self.table[name] = {
         "name": name,
         "type": type_,
-        "kind": kind,
+        "kind": 'this' if kind == 'field' else kind,
         "index": self.kind_index
     }
   

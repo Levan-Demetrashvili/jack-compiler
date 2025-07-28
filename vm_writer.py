@@ -1,7 +1,7 @@
 class VMWriter:
-  def __init__(self,file_path):
-    with open(file_path,'w') as file:
-      self.f = file
+  def __init__(self, file_path):
+    self.f = open(file_path, 'w')
+    
   def write_push(self,segment,index):
     self.f.write(f"push {segment} {index}\n")
   def write_pop(self,segment,index):
@@ -20,4 +20,6 @@ class VMWriter:
     self.f.write(f"function {name} {nLocals}\n")
   def write_return(self):
     self.f.write(f"return\n")
+  def close(self):
+    self.f.close()
     
