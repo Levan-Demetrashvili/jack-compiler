@@ -45,13 +45,14 @@ class Main {
             let b = a[3];
             let b[1] = b[1] + c[1];  // b[1] = 33 + 77 = 110;
         }
-
+        
         do Output.printString("Test 4: expected result: 77; actual result: ");
         do Output.printInt(c[1]);
         do Output.println();
         do Output.printString("Test 5: expected result: 110; actual result: ");
         do Output.printInt(b[1]);
         do Output.println();
+        
         return;
     }
     

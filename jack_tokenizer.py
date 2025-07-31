@@ -2,7 +2,7 @@ import re
 from trimmer import trimmer
 from variables import jack_lexical_elements
 
-def jack_tokenizer(filepath,file_stem):
+def jack_tokenizer(filepath):
   result = []
   # Read all source code lines and split it into VALID tokens
   with open(filepath, "r") as f:

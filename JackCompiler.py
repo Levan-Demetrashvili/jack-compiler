@@ -8,7 +8,7 @@ def main():
   if os.path.isfile(sys.argv[1]):
     program_name = sys.argv[1].split('/')[-1].split('.')[0]
     #* Handling tokenizing
-    tokenized[program_name] = jack_tokenizer(sys.argv[1],program_name)
+    tokenized[program_name] = jack_tokenizer(sys.argv[1])
     #* compilation engine
     for _,tokens_array in tokenized.items():
       compilation_engine(sys.argv[1].replace('jack','vm'),tokens_array)
@@ -18,7 +18,7 @@ def main():
         #* Handling tokenizing
         filepath = os.path.join(sys.argv[1],file)
         file_stem = file.split('.')[0]
-        tokenized[file_stem] = jack_tokenizer(filepath,file_stem)
+        tokenized[file_stem] = jack_tokenizer(filepath)
   
     #* compilation engine
     for class_name,tokens_array in tokenized.items():

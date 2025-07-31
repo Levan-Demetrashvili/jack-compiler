@@ -1,0 +1,19 @@
+function Main.main 3
+push local 0
+call Output.printInt 1
+pop temp 0
+push local 1
+call Output.printInt 1
+pop temp 0
+call Main.print 0
+pop local 2
+push local 2
+call Output.printInt 1
+pop temp 0
+push constant 0
+return
+function Main.print 0
+call Output.println 0
+pop temp 0
+push constant 0
+return
